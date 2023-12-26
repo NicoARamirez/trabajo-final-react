@@ -13,11 +13,11 @@ const Header = () => {
             <Link to="/">Inicio</Link>
           </li>
           <li>
-            <Link to="/categories">Categorías</Link>
-          </li>
-          <li>
             <Link to="/products">Productos</Link>
           </li>
+          <li>
+            <Link to="/categories">Categorías</Link>
+          </li>         
           {user ? (
             <li>
               <button onClick={logout}>Cerrar Sesión</button>
