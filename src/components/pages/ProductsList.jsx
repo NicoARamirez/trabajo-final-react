@@ -4,6 +4,8 @@ import { useAuth } from "@/components/context/AuthContext";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('default'); // default, asc, desc, az y za (los filtros de busqueda)
   const { user } = useAuth();
 
   useEffect(() => {
@@ -28,11 +30,51 @@ const ProductList = () => {
     }
   };
 
+  const filteredProducts = products
+    .filter((product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      switch (sortOrder) {
+        case 'asc':
+          return a.price - b.price;
+        case 'desc':
+          return b.price - a.price;
+        case 'az':
+          return a.title.localeCompare(b.title);
+        case 'za':
+          return b.title.localeCompare(a.title);
+        default:
+          return 0;
+      }
+    });
+
   return (
     <div>
       <h2>Lista de Productos</h2>
+
+      {/* Barra de busqueda */}
+      <input
+        type="text"
+        placeholder="Buscar producto..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      {/* Filtro de busqueda */}
+      <label>
+        Ordenar por:
+        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="default">Predeterminado</option>
+          <option value="asc">Precio (Menor a Mayor)</option>
+          <option value="desc">Precio (Mayor a Menor)</option>
+          <option value="az">Nombre (A - Z)</option>
+          <option value="za">Nombre (Z - A)</option>
+        </select>
+      </label>
+
       <ul>
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <li key={product.id}>
             <Link to={`/products/${product.id}`}>
               <h3>{product.title}</h3>
