@@ -42,28 +42,33 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: registerUser,
-    onSuccess: () => {
-      console.log('Registro exitoso');
-      navigate('/');
-    },
-    onError: (error) => {
-      console.error('Error al registrar usuario:', error.message);
-    },
-  });
-
-  const handleRegister = async () => {
-    try {
+    mutationFn: async () => {
       const emailAvailable = await isEmailAvailable(email);
 
       if (!emailAvailable) {
         throw new Error('El correo electrónico ya está en uso.');
       }
 
-      mutation.mutate({ name, email, password, avatar });
+      return registerUser({ name, email, password, avatar });
+    },
+    onSuccess: () => {
+      console.log('Registro exitoso');
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error('Error al registrar usuario:', error.message);
+      setError(error.message);
+    },
+  });
+
+  const handleRegister = async () => {
+    try {
+      setError(null);
+      await mutation.mutateAsync();
     } catch (error) {
       console.error('Error al manejar el registro:', error.message);
     }
@@ -92,6 +97,11 @@ const Register = () => {
         <input type="text" value={avatar} onChange={(e) => setAvatar(e.target.value)} />
       </label>
       <p></p>
+      {error && (
+        <div style={{ color: 'red', marginTop: '10px' }}>
+          Error al registrar usuario: {error}
+        </div>
+      )}
       <ul>
         <button onClick={handleRegister}>Registrarse</button>
       </ul>

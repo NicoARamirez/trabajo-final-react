@@ -1,18 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './components/pages/Home';
-import Login from './components/pages/Login';
-import Register from './components/pages/Register';
-import Categories from './components/pages/Categories';
-import ProductsList from './components/pages/ProductsList';
-import ProductDetail from './components/pages/ProductDetail';
-import ProductCreate from './components/pages/ProductCreate';
-import ProductEdit from './components/pages/ProductEdit';
-import CartDetail from './components/pages/CartDetail';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import Home from './Pages/Home/Home';
+import Login from './Pages/Users/Login';
+import Register from './Pages/Users/Register';
+import Categories from './Pages/Categories/Categories';
+import ProductsList from './Pages/Products/ProductsList';
+import ProductDetail from './Pages/Products/ProductDetail';
+import ProductCreate from './Pages/Products/ProductCreate';
+import ProductEdit from './Pages/Products/ProductEdit';
+import CartDetail from './Pages/Products/CartDetail';
 import {
-  useMutation,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
