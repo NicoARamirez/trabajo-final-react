@@ -41,6 +41,7 @@ const ProductDetail = () => {
   return (
     <div>
       <h2>{product.title}</h2>
+      <img src={product.images}></img>
       <p>Precio: ${product.price}</p>
       <p>{product.description}</p>
       {user && user.isAdmin && (

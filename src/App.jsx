@@ -6,6 +6,7 @@ import Home from './Pages/Home/Home';
 import Login from './Pages/Users/Login';
 import Register from './Pages/Users/Register';
 import Categories from './Pages/Categories/Categories';
+import CategoryProducts from './Pages/Categories/CategoryProducts'; // Este será tu nuevo componente
 import ProductsList from './Pages/Products/ProductsList';
 import ProductDetail from './Pages/Products/ProductDetail';
 import ProductCreate from './Pages/Products/ProductCreate';
@@ -32,6 +33,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:categoryId/products" element={<CategoryProducts />} />
           <Route path="/products" element={<ProductsList  />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/products/create" element={<ProductCreate />} />
