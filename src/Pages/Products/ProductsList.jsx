@@ -78,7 +78,12 @@ const ProductList = () => {
           <li key={product.id}>
             <Link to={`/products/${product.id}`}>
               <h3>{product.title}</h3>
-              <img src={product.images}></img>
+              <img src={product.images} style={{
+            width: "300px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            marginBottom: "0"
+          }}></img>
             </Link>
             <p>Precio: ${product.price}</p>
             <p>{product.description}</p>

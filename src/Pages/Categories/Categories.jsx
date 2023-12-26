@@ -64,8 +64,13 @@ const Categories = () => {
         <ul>
           {categories.map((category) => (
             <li key={category.id}>
-            <Link to={`/categories/${category.id}/products`}>{category.name}</Link>
-            <img src={category.image}></img>
+            <img src={category.image} style={{
+            width: "300px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            marginBottom: "0"
+          }}></img>
+            <Link to={`/categories/${category.id}/products`}>{category.name}</Link>  
           </li>
           ))}
         </ul>

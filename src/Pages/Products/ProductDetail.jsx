@@ -41,7 +41,12 @@ const ProductDetail = () => {
   return (
     <div>
       <h2>{product.title}</h2>
-      <img src={product.images}></img>
+      <img src={product.images} style={{
+            width: "300px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            marginBottom: "0"
+          }}></img>
       <p>Precio: ${product.price}</p>
       <p>{product.description}</p>
       {user && user.isAdmin && (
