@@ -5,7 +5,7 @@ import { useAuth } from "@/components/context/AuthContext";
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const { user } = useAuth(); 
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProduct = async () => {

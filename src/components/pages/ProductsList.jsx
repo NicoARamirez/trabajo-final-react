@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { useAuth } from "@/components/context/AuthContext";
-
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  const { user } = useAuth(); 
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('https://api.escuelajs.co/api/v1/products');
-        setProducts(response.data);
+        const response = await fetch('https://api.escuelajs.co/api/v1/products');
+        const data = await response.json();
+        setProducts(data);
       } catch (error) {
         console.error('Error obteniendo la lista de productos:', error);
       }
@@ -34,7 +34,9 @@ const ProductList = () => {
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-            <h3>{product.title}</h3>
+            <Link to={`/products/${product.id}`}>
+              <h3>{product.title}</h3>
+            </Link>
             <p>Precio: ${product.price}</p>
             <p>{product.description}</p>
             {user && user.isAdmin && (
