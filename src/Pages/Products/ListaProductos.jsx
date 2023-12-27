@@ -23,10 +23,10 @@ const ProductList = () => {
   }, []);
 
   const handleDeleteProduct = (productId) => {
-    if (user && user.isAdmin) {
+    if (user && user.AdminRoute) {
       console.log(`Eliminar producto con ID ${productId}`);
     } else {
-      console.warn('No tienes permisos para eliminar productos.');
+      console.warn('No tenes rol de admin');
     }
   };
 
@@ -76,7 +76,7 @@ const ProductList = () => {
       <ul>
         {filteredProducts.map((product) => (
           <li key={product.id}>
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/producto/${product.id}`}>
               <h3>{product.title}</h3>
               <img src={product.images} style={{
             width: "300px",
@@ -87,7 +87,7 @@ const ProductList = () => {
             </Link>
             <p>Precio: ${product.price}</p>
             <p>{product.description}</p>
-            {user && user.isAdmin && (
+            {user && user.AdminRoute && (
               <button onClick={() => handleDeleteProduct(product.id)}>
                 Eliminar producto
               </button>

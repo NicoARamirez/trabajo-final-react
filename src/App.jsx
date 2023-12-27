@@ -1,51 +1,95 @@
+// react y router
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+// contextos
+import { AuthProvider } from "@/components/context/AuthContext";
+import { CartProvider } from "@/components/context/CartContext";
+
+// usuario
+import Login from './Pages/Users/Login';
+import Register from './Pages/Users/Register';
+import { AdminRoute } from './Pages/Users/isAdmin';
+
+// categorias
+import Categories from './Pages/Categories/Categorias';
+import CategoryProducts from './Pages/Categories/ProductosCategorias'; // Este será tu nuevo componente
+import AddCategory from './Pages/Categories/AgregarCategoria'; 
+import DeleteCategory from './Pages/Categories/BorrarCategoria'; 
+import UpdateCategory from './Pages/Categories/ActualizarCategoria'; 
+
+// productos
+import ProductsList from './Pages/Products/ListaProductos';
+import ProductDetail from './Pages/Products/Producto';
+import ProductCreate from './Pages/Products/CrearProducto';
+import UpdateProduct from './Pages/Products/ActualizarProducto';
+import DeleteProduct from './Pages/Products/BorrarProducto';
+
+// carrito
+import CartDetail from './Pages/Products/Carrito';
+
+// header, footer y home
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './Pages/Home/Home';
-import Login from './Pages/Users/Login';
-import Register from './Pages/Users/Register';
-import Categories from './Pages/Categories/Categories';
-import CategoryProducts from './Pages/Categories/CategoryProducts'; // Este será tu nuevo componente
-import ProductsList from './Pages/Products/ProductsList';
-import ProductDetail from './Pages/Products/ProductDetail';
-import ProductCreate from './Pages/Products/ProductCreate';
-import ProductEdit from './Pages/Products/ProductEdit';
-import CartDetail from './Pages/Products/CartDetail';
+
+
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
 
+
 const queryClient = new QueryClient();
+
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-    <Router>
-      <div>
-        {/* Header */}
-        <Header />
-        
-        {/* Definir las rutas */}
-        <Routes>
-          <Route path='/' element={<Home/>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/categories/:categoryId/products" element={<CategoryProducts />} />
-          <Route path="/products" element={<ProductsList  />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/products/create" element={<ProductCreate />} />
-          <Route path="/products/edit/:id" element={<ProductEdit />} />
-          <Route path="/cart-detail" element={<CartDetail />} />
-          {/* Agregar más rutas según sea necesario */}
-        </Routes>
+      <Router>
+        <CartProvider>
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<Header />}>
+              <Route index element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-        {/* Footer */}
-        <Footer />
-      </div>
-    </Router>
+              <Route path="/categorias" element={<Categories />} />
+              <Route path="/categorias/:CategoryId/productos" element={<CategoryProducts />} />
+              <Route path="/categorias/agregarcategoria" element={
+              <AdminRoute>
+                <AddCategory />
+              </AdminRoute>
+            } />
+            <Route path= "/categoria/borrarcategoria/:CategoryId" element= {
+              <AdminRoute>
+                <DeleteCategory />
+              </AdminRoute> } />
+              <Route path="/categoria/actualizarcategoria/:CategoryId" element= {
+              <AdminRoute>
+                <UpdateCategory />
+              </AdminRoute> } /> 
+              <Route path="/productos" element={<ProductsList />} />
+              <Route path="/producto/:productId" element={<ProductDetail />} />
+              <Route path="/producto/agregarproducto" element={
+              <AdminRoute>
+                <ProductCreate />
+              </AdminRoute>} />
+              <Route path="/producto/actualizarproducto/:productId" element={
+              <AdminRoute>
+                <UpdateProduct />
+              </AdminRoute>} />
+              <Route path="/producto/borrarproducto/:productId" element={
+              <AdminRoute>
+                <DeleteProduct />
+              </AdminRoute>} />
+              <Route path="/cart-detail" element={<CartDetail />} /></Route>
+            </Routes>
+            <Footer />
+          </AuthProvider>
+        </CartProvider>
+      </Router>
     </QueryClientProvider>
   );
 }

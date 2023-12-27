@@ -1,64 +1,92 @@
 import React, { useState } from 'react';
 import { useAuth } from "@/components/context/AuthContext";
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
-const Login = () => {
-  const { setUser } = useAuth();
+const loginMutation = async ({ email, password }) => {
+  const response = await fetch ( 'https://api.escuelajs.co/api/v1/auth/login', {
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json',
+          
+      },
+      body: JSON.stringify({email,password}),
+  });
+
+  if (!response.ok) {
+      const error = await response.json();
+      throw new Error (error.message);
+  }
+  const userData = await response.json();
+  return userData;
+  
+};
+
+export const Login = () => {
+  const [formData, setFormData] = useState ({
+      email: '',
+      password: '',
+  });
+
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const { login } = useAuth();
+  const location = useLocation();
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch('https://api.escuelajs.co/api/v1/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+  
 
-      if (!response.ok) {
-        console.error('Error al iniciar sesión:', error.message);
-        throw new Error('Error al iniciar sesión. Verifica tus credenciales.');
+  const mutation = useMutation ({
+      mutationFn: loginMutation,
+      onSuccess: (data) => {
+          console.log('Login exitoso', data);
+          login(data);
+          const from = location.state?.from?.pathname || '/';
+          navigate(from);
+      },
+      onError: (data) => {
+          console.log ('Algo salio mal', data);
       }
+  })
+  
+  const handleInputChange = (event) => {
+      const {name, value} = event.target;
+      setFormData({
+          ...formData,
+          [name]:value,
+      });
+  };
 
-      const userData = await response.json();
-      setUser(userData);
-      navigate('/');
-    } catch (error) {
-      setError(error.message);
-    }
+  const handleSubmit = (event) => {
+      event.preventDefault();
+      console.log(formData);
+      mutation.mutate(formData);
   };
 
   return (
-    <div>
-      <h1>Iniciar Sesión</h1>
-      <label>
-        Email:
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </label>
-      <p></p>
-      <label>
-        Contraseña:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <ul>
-        <button onClick={handleLogin}>
-          Login
-        </button>
-      </ul>
-    </div>
+      <form onSubmit={handleSubmit}>
+        <h1>Iniciar Sesión</h1>
+          <label>
+              Email:
+              <input
+                  type="text"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  />
+          </label>
+          <p></p>
+          <label>
+              Contraseña:
+              <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  />
+          </label>
+          <p></p>
+          <button type="submit">Iniciar sesion</button>
+      </form>
   );
 };
 

@@ -76,7 +76,7 @@ const Register = () => {
 
   return (
     <div>
-      <h1>Registro</h1>
+      <h1>Registrarse</h1>
       <label>
         Nombre:
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />

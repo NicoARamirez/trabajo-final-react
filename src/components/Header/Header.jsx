@@ -1,41 +1,53 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from "@/components/context/AuthContext";
 
-const Header = () => {
-  const { user, logout } = useAuth();
 
+export function Header() {
+  const { user, logout } = useAuth();
   return (
-    <header>
+    <div>
       <nav>
         <ul>
           <li>
-            <Link to="/">Inicio</Link>
+            <Link to="/"> Inicio </Link>
           </li>
-          <li>
-            <Link to="/products">Productos</Link>
-          </li>
-          <li>
-            <Link to="/categories">Categorías</Link>
-          </li>         
           {user ? (
-            <li>
-              <button onClick={logout}>Cerrar Sesión</button>
-            </li>
-          ) : (
             <>
               <li>
-                <Link to="/login">Iniciar Sesión</Link>
+                <Link to="/productos"> Productos </Link>
               </li>
               <li>
-                <Link to="/register">Registrarse</Link>
+                <Link to="/categorias"> Categorías </Link>
               </li>
+              <li>
+                <Link to="/cart-detail"> Carrito </Link>
+              </li>
+              <li>
+                <button onClick={logout}>Cerrar Sesion</button>
+              </li>
+            </>
+          ) : (
+            <>
+            <li>
+                <Link to="/productos"> Productos </Link>
+              </li>
+            <li>
+                <Link to="/categorias"> Categorías </Link>
+              </li>
+              <li>
+                <Link to="/login"> Iniciar Sesión </Link>
+              </li>
+              <li>
+                <Link to="/register"> Registrarse </Link>
+              </li>   
             </>
           )}
         </ul>
       </nav>
-    </header>
-  );
+      <Outlet />
+    </div >
+  )
 };
 
 export default Header;

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from "@/components/context/AuthContext";
 
 
-const ProductEdit = () => {
-  const { id } = useParams();
+const ProductCreate = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -14,19 +13,6 @@ const ProductEdit = () => {
 
   const { user } = useAuth(); 
   const history = useNavigate();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(`https://fakeapi.platzi.com/en/rest/products/${id}`);
-        setFormData(response.data);
-      } catch (error) {
-        console.error('Error obteniendo el detalle del producto:', error);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,22 +25,24 @@ const ProductEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (user && user.isAdmin) {
-      try {
-        await axios.put(`https://fakeapi.platzi.com/en/rest/products/${id}`, formData);
 
-        history.push(`/products/${id}`);
+    if (user && user.AdminRoute) {
+      try {
+      
+        await axios.post('https://fakeapi.platzi.com/en/rest/products/', formData);
+
+        history.push('/productos');
       } catch (error) {
-        console.error('Error al editar el producto:', error);
+        console.error('Error al crear el producto:', error);
       }
     } else {
-      console.warn('No tienes permisos para editar productos.');
+      console.warn('No tenes rol de admin');
     }
   };
 
   return (
     <div>
-      <h2>Editar Producto</h2>
+      <h2>Crear Producto</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Título:
@@ -65,6 +53,7 @@ const ProductEdit = () => {
             onChange={handleInputChange}
           />
         </label>
+        <p></p>
         <label>
           Descripción:
           <textarea
@@ -73,6 +62,7 @@ const ProductEdit = () => {
             onChange={handleInputChange}
           />
         </label>
+        <p></p>
         <label>
           Precio:
           <input
@@ -82,10 +72,11 @@ const ProductEdit = () => {
             onChange={handleInputChange}
           />
         </label>
-        <button type="submit">Guardar Cambios</button>
+        <p></p>
+        <button type="submit">Crear Producto</button>
       </form>
     </div>
   );
 };
 
-export default ProductEdit;
+export default ProductCreate;

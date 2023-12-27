@@ -12,7 +12,6 @@ const CartDetail = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        // Detalles del carrito
         const response = await axios.get('https://fakeapi.platzi.com/en/rest/cart/');
         setCartItems(response.data);
       } catch (error) {

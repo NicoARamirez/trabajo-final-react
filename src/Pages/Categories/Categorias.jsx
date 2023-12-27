@@ -72,7 +72,7 @@ const Categories = () => {
           }}></img>
           <p></p>
           <li>
-            <Link to={`/categories/${category.id}/products`}>{category.name}</Link>  
+            <Link to={`/categorias/${category.id}/productos`}>{category.name}</Link>  
             </li>
           </p>
           ))}
